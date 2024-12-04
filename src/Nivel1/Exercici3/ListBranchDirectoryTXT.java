@@ -7,42 +7,45 @@ import java.util.Arrays;
 public class ListBranchDirectoryTXT {
 
     public static void listBranchTXT(String directoryPath, String TXT) {
-
         File directory = new File(directoryPath);
 
         if (directory.isDirectory()) {
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(TXT))) {
                 exploreDirectory(directory, bw);
-                System.out.println("Printing data in" + TXT);
-
+                System.out.println("Printing data in " + TXT);
             } catch (IOException e) {
-                System.out.println("Error printing in txt");
+                System.out.println("Error printing in txt: " + e.getMessage());
             }
         } else {
-            System.out.println("Error path");
+            System.out.println("Error: Invalid path");
+        }
+    }
+
+    private static void exploreDirectory(File directory, BufferedWriter bw) throws IOException {
+        File[] files = directory.listFiles();
+
+        if (files != null) {
+            Arrays.sort(files);
         }
 
-        private static void exploreDirectory (File directory, BufferedWriter bw) throws IOException {
+        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
 
-            File[] files = directory.listFiles();
+        for (File file : files) {
+            String fileType = " ";
 
-            if (files != null) {
-                Arrays.sort(files);
+            if (file.isDirectory()) {
+                fileType = "D";
+            } else {
+                fileType = "F";
             }
+            String lastDate = date.format(file.lastModified());
 
-            SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+            bw.write(fileType + " " + file.getName() + " " + lastDate);
+            bw.newLine();
 
-            for (File file : files) {
-                String fileType = " ";
-
-                if (file.isDirectory()) {
-                    fileType = "D";
-                    System.out.println(date);
-                } else {
-                    fileType = "F";
-                }
+            if (file.isDirectory()) {
+                exploreDirectory(file, bw);
             }
-
         }
     }
 }

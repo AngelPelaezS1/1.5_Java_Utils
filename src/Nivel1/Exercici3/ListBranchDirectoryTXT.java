@@ -14,7 +14,7 @@ public class ListBranchDirectoryTXT {
                 exploreDirectory(directory, bw);
                 System.out.println("Printing data in " + TXT);
             } catch (IOException e) {
-                System.out.println("Error printing in txt: " + e.getMessage());
+                System.err.println("Error printing in txt: " + e.getMessage());
             }
         } else {
             System.out.println("Error: Invalid path");
